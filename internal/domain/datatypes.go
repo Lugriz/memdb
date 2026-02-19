@@ -1,4 +1,4 @@
-package datatypes
+package domain
 
 type DataType int
 
