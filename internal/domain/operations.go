@@ -1,8 +1,4 @@
-package datatypes
-
-import (
-	"github.com/Lugriz/memdb/internal/persistence"
-)
+package domain
 
 type OperationType int
 
@@ -40,4 +36,4 @@ type OperationResult struct {
 	Write *WriteOperationResult
 }
 
-type OperationHandler func(store persistence.Store, key string, args [][]byte) (OperationResult, error)
+type OperationHandler func(persistence Persistence, key string, args [][]byte) (OperationResult, error)
