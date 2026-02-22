@@ -33,13 +33,17 @@ func KeyGetHandler(store domain.Persistence, key string, _ [][]byte) (domain.Ope
 }
 
 func KeyDelHandler(store domain.Persistence, key string, _ [][]byte) (domain.OperationResult, error) {
+	var writeOp domain.WriteOperationResult
+
 	if ok := store.DeleteKV(key); ok {
+		writeOp.AffectedKeys = 1
+
 		return domain.OperationResult{
-			Write: &domain.WriteOperationResult{
-				AffectedKeys: 1,
-			},
+			Write: &writeOp,
 		}, nil
 	}
 
-	return domain.OperationResult{}, nil
+	return domain.OperationResult{
+		Write: &writeOp,
+	}, nil
 }
