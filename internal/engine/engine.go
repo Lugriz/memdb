@@ -9,7 +9,7 @@ type Engine struct {
 	dataTypeRegistry domain.DataTypeRegistry
 }
 
-func (e *Engine) Execute(command domain.Command) (domain.OperationResult, error) {
+func (e *Engine) Execute(command *domain.Command) (domain.OperationResult, error) {
 	opRegistry, ok := e.dataTypeRegistry[command.DataType]
 	if !ok {
 		return domain.OperationResult{}, domain.ErrInvalidDataType

@@ -1,5 +1,5 @@
 package domain
 
 type Engine interface {
-	Execute(Command) (OperationResult, error)
+	Execute(*Command) (OperationResult, error)
 }
