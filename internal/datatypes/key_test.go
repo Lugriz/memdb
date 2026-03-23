@@ -21,7 +21,7 @@ func TestKeySetHandler(t *testing.T) {
 		Persistence     *mocks.MockPersistence
 		ExpectSetKVCall bool
 		Key             string
-		Args            [][]byte
+		Args            []string
 		Result          domain.OperationResult
 		ExpectErr       bool
 		Err             error
@@ -33,7 +33,7 @@ func TestKeySetHandler(t *testing.T) {
 			},
 			ExpectSetKVCall: true,
 			Key:             "key1",
-			Args:            [][]byte{[]byte("val 1")},
+			Args:            []string{"val 1"},
 			Result: domain.OperationResult{
 				Write: &domain.WriteOperationResult{
 					AffectedKeys: 1,
@@ -47,7 +47,7 @@ func TestKeySetHandler(t *testing.T) {
 			},
 			ExpectSetKVCall: false,
 			Key:             "key1",
-			Args:            [][]byte{},
+			Args:            []string{},
 			Result:          domain.OperationResult{},
 			ExpectErr:       true,
 			Err:             domain.ErrMissingArgs,
@@ -79,7 +79,7 @@ func TestKeyGetHandler(t *testing.T) {
 		Name        string
 		Persistence *mocks.MockPersistence
 		Key         string
-		Args        [][]byte
+		Args        []string
 		Result      domain.OperationResult
 	}{
 		{
@@ -128,7 +128,7 @@ func TestKeyDelHandler(t *testing.T) {
 		Name        string
 		Persistence *mocks.MockPersistence
 		Key         string
-		Args        [][]byte
+		Args        []string
 		Result      domain.OperationResult
 	}{
 		{
