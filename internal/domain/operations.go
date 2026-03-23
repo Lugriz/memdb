@@ -1,5 +1,7 @@
 package domain
 
+import "github.com/Lugriz/memdb/internal/shared/maps"
+
 type OperationType int
 
 const (
@@ -14,6 +16,8 @@ var operationStrings = map[OperationType]string{
 	DEL: "DEL",
 }
 
+var stringToOperations = maps.Invert(operationStrings)
+
 func (o OperationType) String() string {
 	op, ok := operationStrings[o]
 	if ok {
@@ -21,6 +25,15 @@ func (o OperationType) String() string {
 	}
 
 	return ""
+}
+
+func ParseOperationType(key string) (OperationType, error) {
+	op, ok := stringToOperations[key]
+	if ok {
+		return op, nil
+	}
+
+	return 0, ErrInvalidOperationType
 }
 
 type ReadOperationResult struct {
@@ -36,4 +49,4 @@ type OperationResult struct {
 	Write *WriteOperationResult
 }
 
-type OperationHandler func(persistence Persistence, key string, args [][]byte) (OperationResult, error)
+type OperationHandler func(persistence Persistence, key string, args []string) (OperationResult, error)
