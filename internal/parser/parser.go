@@ -26,11 +26,6 @@ func ParseStatement(statement string) (*domain.Command, error) {
 	}
 
 	key := string(tokens[1])
-
-	if key == "" {
-		return nil, domain.ErrMissingArgs
-	}
-
 	args := tokens[3:]
 
 	return &domain.Command{
