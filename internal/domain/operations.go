@@ -1,6 +1,10 @@
 package domain
 
-import "github.com/Lugriz/memdb/internal/shared/maps"
+import (
+	"strings"
+
+	"github.com/Lugriz/memdb/internal/shared/maps"
+)
 
 type OperationType int
 
@@ -28,12 +32,12 @@ func (o OperationType) String() string {
 }
 
 func ParseOperationType(key string) (OperationType, error) {
-	op, ok := stringToOperations[key]
+	op, ok := stringToOperations[strings.ToUpper(key)]
 	if ok {
 		return op, nil
 	}
 
-	return 0, ErrInvalidOperationType
+	return -1, ErrInvalidOperationType
 }
 
 type ReadOperationResult struct {

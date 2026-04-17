@@ -1,6 +1,10 @@
 package domain
 
-import "github.com/Lugriz/memdb/internal/shared/maps"
+import (
+	"strings"
+
+	"github.com/Lugriz/memdb/internal/shared/maps"
+)
 
 type DataType int
 
@@ -24,10 +28,10 @@ func (c DataType) String() string {
 }
 
 func ParseDataType(key string) (DataType, error) {
-	dt, ok := stringToDataType[key]
+	dt, ok := stringToDataType[strings.ToUpper(key)]
 	if ok {
 		return dt, nil
 	}
 
-	return 0, ErrInvalidDataType
+	return -1, ErrInvalidDataType
 }
