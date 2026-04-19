@@ -36,7 +36,7 @@ func TestKeySetHandler(t *testing.T) {
 			Args:            []string{"val 1"},
 			Result: domain.OperationResult{
 				Write: &domain.WriteOperationResult{
-					AffectedKeys: 1,
+					AffectedKey: true,
 				},
 			},
 		},
@@ -141,7 +141,7 @@ func TestKeyDelHandler(t *testing.T) {
 			Key: "key1",
 			Result: domain.OperationResult{
 				Write: &domain.WriteOperationResult{
-					AffectedKeys: 1,
+					AffectedKey: true,
 				},
 			},
 		},
@@ -155,7 +155,7 @@ func TestKeyDelHandler(t *testing.T) {
 			Key: "key1",
 			Result: domain.OperationResult{
 				Write: &domain.WriteOperationResult{
-					AffectedKeys: 0,
+					AffectedKey: false,
 				},
 			},
 		},

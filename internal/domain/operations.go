@@ -45,7 +45,7 @@ type ReadOperationResult struct {
 }
 
 type WriteOperationResult struct {
-	AffectedKeys int
+	AffectedKey bool
 }
 
 type OperationResult struct {
