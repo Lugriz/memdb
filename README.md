@@ -1,44 +1,68 @@
 # memdb
 
-memdb is a simple key-value in-memory database. Just for learning.
+memdb is a simple key-value in-memory database. Just for learning. This database will contain different data types to store data.
 
 ## Features
 
-- in-memory key-value store
-- eviction policies like LFU, LRU
-- TTL (per key)
-- concurrent
-- HTTP/CLI access
+- Multiple data types support
+  - [ ] String
+  - [ ] Hash
+  - [ ] Set
+- [ ] HTTP/CLI access
+- [ ] Concurrent
+- [ ] Eviction policies like LFU, LRU
+- [ ] TTL (per key)
 
 ## Running DB
 
 Running the command
 
-> memdb --port 9300 --eviction-policy LRU
+> memdb --port 0000 --eviction-policy LRU
 
-## Data structures
+## HTTP API Specification
 
-This database will contain some data structures that will store data:
+All request operations will be a *POST* request, the path defines the data type to use and the operation. This is the path structure:
 
-- **Strings**: single key-value
-- **Hash**: multiple key-value data
-- **Set**: a collection of not repeating values
+> POST /{data_type}/{operation}
 
-## HTTP Specification
+And the body will be json format that contains a *key* and *value* properties for requests. This is the body structure:
 
-The path represent the data structure to use, for example: _/key, /hash, /set_ and the HTTP method the action
+```text
+{
+    key: string,
+    value: any?
+}
+```
 
-### Key
+**NOTE**: *value* is omited depending the operation.
+
+### Error responses
+
+Error status codes
+
+- 400 (bad request): invalid input, either body or path
+- 404 (not found): key not found
+- 500 (internal error): internal server error
+
+Error responses structure:
+
+```text
+{
+    "type": ""
+    "message": "",
+}
+```
+
+Where _**type**_ is the error type and _**message**_ the error message.
+
+### Examples
+
+#### Key
 
 Creating/Replacing a key
 
-```text
-POST /key
-
-STATUS:
-201: When new Item
-200: When Item already exists
-400: bad input data
+```json
+POST /key/set
 
 BODY:
 {
@@ -46,22 +70,30 @@ BODY:
     "value": ""
 }
 
+STATUS:
+200: success response
+
 RESPONSE:
 {
-    "affected_keys": 0,
+    "affected_key": true, // whether the key was affected
 }
 ```
 
 Getting a key
 
-```text
-GET /key/{key}
+```json
+POST /key/get
+
+BODY:
+{
+    "key": "",
+}
 
 STATUS:
 200: success response
 204 (no content): item does not exists
 
-RESPONSE (when 200):
+RESPONSE:
 {
     "value": ""
 }
@@ -69,30 +101,29 @@ RESPONSE (when 200):
 
 Deleting a key
 
-```text
-DELETE /key/{key}
+```json
+POST /key/del
+
+BODY:
+{
+    "key": "",
+}
 
 STATUS:
 200: success response
 
 RESPONSE:
 {
-    "affected_keys": 0,
+    "affected_key": true, // whether the key was affected
 }
-
 ```
 
 ### Hash
 
 Creating/Replacing a hash
 
-```text
-POST /hash
-
-STATUS:
-201: When new Item
-200: When Item already exists
-400: bad input data
+```json
+POST /hash/set
 
 BODY:
 {
@@ -103,46 +134,56 @@ BODY:
     }
 }
 
+STATUS:
+200: When Item already exists
+
 RESPONSE:
 {
-    "affected_keys": 1,
+    "affected_key": true, // whether the key was affected
 }
 ```
 
 Adding/Replacing the hash properties
 
-```text
-PUT /hash/{key}
-
-STATUS:
-200: Succes response
-400: bad input data
-404: key not found
+```json
+POST /hash/add
 
 BODY:
 {
+    "key": "",
     "value": {
         "key1": "",
         "key2": ""
     }
 }
 
+STATUS:
+200: Success response
+404: key not found
+
 RESPONSE:
 {
-    "affected_keys": 1,
+    "affected_key": true,
 }
 ```
 
+**NOTE:** If the key does not exists, it returns *404* status code
+
 Getting a hash
 
-```text
-GET /hash/{key}
+```json
+POST /hash/get
+
+BODY:
+{
+    "key": "",
+}
 
 STATUS:
 200: success response
 204 (no content): item does not exists
 
-RESPONSE (when 200):
+RESPONSE:
 {
     "value": {
         "key1": "",
@@ -153,70 +194,19 @@ RESPONSE (when 200):
 
 Deleting a hash
 
-```text
-DELETE /hash/{key}
+```json
+POST /hash/del
+
+BODY:
+{
+    "key": "",
+}
 
 STATUS:
 200: success response
 
 RESPONSE:
 {
-    "affected_keys": 0,
+    "affected_key": true, // whether the key was affected
 }
-
 ```
-
-Deleting hash properties (can delete multiple keys separated by spaces)
-
-```text
-DELETE /hash/{key}?keys={key, ...}
-
-STATUS:
-200: success response
-
-RESPONSE:
-{
-    "affected_keys": 0,
-}
-
-```
-
-## CLI Specification
-
-Defines how to use memdb by using the CLI
-
-### Key
-
-Creating/Updating a key
-
-> KEY {keyname} SET {value}
-
-Getting a key
-
-> KEY {keyname} GET
-
-Deleting a key
-
-> KEY {keyname} DEL
-
-### Hash
-
-Creating/Replacing the hash (can set multiple key-values separated by spaces)
-
-> HASH {keyname} SET {key} {value} ...
-
-Adding/Replacing the hash properties (can set multiple key-values separated by spaces)
-
-> HASH {keyname} PUT {key} {value} ...
-
-Getting a hash
-
-> HASH {keyname} GET
-
-Deleting a hash
-
-> HASH {keyname} DEL
-
-Deleting hash keys (can delete multiple keys separated by spaces)
-
-> HASH {keyname} DEL {key} ...
