@@ -28,7 +28,7 @@ func (c DataType) String() string {
 }
 
 func ParseDataType(key string) (DataType, error) {
-	dt, ok := stringToDataType[strings.ToUpper(key)]
+	dt, ok := stringToDataType[strings.ToUpper(strings.TrimSpace(key))]
 	if ok {
 		return dt, nil
 	}

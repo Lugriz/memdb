@@ -32,7 +32,7 @@ func (o Operation) String() string {
 }
 
 func ParseOperation(key string) (Operation, error) {
-	op, ok := stringToOperations[strings.ToUpper(key)]
+	op, ok := stringToOperations[strings.ToUpper(strings.TrimSpace(key))]
 	if ok {
 		return op, nil
 	}

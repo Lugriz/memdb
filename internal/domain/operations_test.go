@@ -65,6 +65,11 @@ func TestParseOperation(t *testing.T) {
 			Result: domain.GET,
 		},
 		{
+			Name:   "Should return DEL even with whitespaces",
+			Key:    "  DEL  ",
+			Result: domain.DEL,
+		},
+		{
 			Name:      "returns an error when operation type does not exist",
 			Key:       "INVALID",
 			Result:    -1,

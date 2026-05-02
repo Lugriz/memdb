@@ -45,13 +45,18 @@ func TestParseDataType(t *testing.T) {
 		Err       error
 	}{
 		{
-			Name:   "returns a operation type with upper case key",
+			Name:   "returns a data type with upper case key",
 			Key:    "KEY",
 			Result: domain.KEY,
 		},
 		{
-			Name:   "returns a operation type with lower case key",
+			Name:   "returns a data type with lower case key",
 			Key:    "key",
+			Result: domain.KEY,
+		},
+		{
+			Name:   "returns a data type even with whitespaces",
+			Key:    "  KEY  ",
 			Result: domain.KEY,
 		},
 		{
