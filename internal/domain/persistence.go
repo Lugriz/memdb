@@ -1,7 +1,7 @@
 package domain
 
 type Persistence interface {
-	SetKV(key, value string)
-	GetKV(key string) (string, bool)
+	SetKV(key string, value Value)
+	GetKV(key string) (Value, bool)
 	DeleteKV(key string) bool
 }

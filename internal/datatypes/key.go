@@ -4,14 +4,16 @@ import (
 	"github.com/Lugriz/memdb/internal/domain"
 )
 
-func KeySetHandler(store domain.Persistence, key string, args []string) (domain.OperationResult, error) {
-	if len(args) < 1 {
-		return domain.OperationResult{}, domain.ErrMissingArgs
+func KeySetHandler(store domain.Persistence, key string, args any) (domain.OperationResult, error) {
+	data, ok := args.(string)
+	if !ok {
+		return domain.OperationResult{}, domain.ErrInvalidValueType // FIXME: Invalid type
 	}
 
-	value := args[0]
-
-	store.SetKV(key, value)
+	store.SetKV(key, domain.Value{
+		DataType: domain.KEY,
+		Data:     data,
+	})
 
 	return domain.OperationResult{
 		Write: &domain.WriteOperationResult{
@@ -20,11 +22,11 @@ func KeySetHandler(store domain.Persistence, key string, args []string) (domain.
 	}, nil
 }
 
-func KeyGetHandler(store domain.Persistence, key string, _ []string) (domain.OperationResult, error) {
+func KeyGetHandler(store domain.Persistence, key string, _ any) (domain.OperationResult, error) {
 	if val, ok := store.GetKV(key); ok {
 		return domain.OperationResult{
 			Read: &domain.ReadOperationResult{
-				Value: val,
+				Value: val.Data,
 			},
 		}, nil
 	}
@@ -32,7 +34,7 @@ func KeyGetHandler(store domain.Persistence, key string, _ []string) (domain.Ope
 	return domain.OperationResult{}, nil
 }
 
-func KeyDelHandler(store domain.Persistence, key string, _ []string) (domain.OperationResult, error) {
+func KeyDelHandler(store domain.Persistence, key string, _ any) (domain.OperationResult, error) {
 	var writeOp domain.WriteOperationResult
 
 	writeOp.AffectedKey = store.DeleteKV(key)

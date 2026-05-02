@@ -1,35 +1,41 @@
 package persistence
 
-import "github.com/Lugriz/memdb/internal/domain"
+import (
+	"sync"
+
+	"github.com/Lugriz/memdb/internal/domain"
+)
 
 type Memdb struct {
-	kv map[string]string
+	kv sync.Map
 }
 
 var _ domain.Persistence = &Memdb{}
 
-func (db *Memdb) SetKV(key, value string) {
-	db.kv[key] = value
+func (db *Memdb) SetKV(key string, value domain.Value) {
+	db.kv.Store(key, value)
 }
 
-func (db *Memdb) GetKV(key string) (string, bool) {
-	val, ok := db.kv[key]
+func (db *Memdb) GetKV(key string) (domain.Value, bool) {
+	val, ok := db.kv.Load(key)
+	if ok {
+		return val.(domain.Value), true
+	}
 
-	return val, ok
+	return domain.Value{}, false
 }
 
 func (db *Memdb) DeleteKV(key string) bool {
-	if _, ok := db.kv[key]; ok {
-		delete(db.kv, key)
-
+	if _, ok := db.kv.Load(key); ok {
+		db.kv.Delete(key)
 		return true
 	}
 
 	return false
 }
 
-func NewDB() *Memdb {
+func NewMemDB() *Memdb {
 	return &Memdb{
-		kv: make(map[string]string),
+		kv: sync.Map{},
 	}
 }

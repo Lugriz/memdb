@@ -10,14 +10,14 @@ type MockPersistence struct {
 
 var _ domain.Persistence = &MockPersistence{}
 
-func (m *MockPersistence) SetKV(key string, value string) {
+func (m *MockPersistence) SetKV(key string, value domain.Value) {
 	m.SpySetKV.Called = true
 }
 
-func (m *MockPersistence) GetKV(key string) (string, bool) {
+func (m *MockPersistence) GetKV(key string) (domain.Value, bool) {
 	r := m.SpyGetKV.Returns
 
-	return r[0].(string), r[1].(bool)
+	return r[0].(domain.Value), r[1].(bool)
 }
 
 func (m *MockPersistence) DeleteKV(key string) bool {

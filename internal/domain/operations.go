@@ -53,4 +53,4 @@ type OperationResult struct {
 	Write *WriteOperationResult
 }
 
-type OperationHandler func(persistence Persistence, key string, args []string) (OperationResult, error)
+type OperationHandler func(persistence Persistence, key string, args any) (OperationResult, error)
