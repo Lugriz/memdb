@@ -20,7 +20,7 @@ func (e *Engine) Execute(command *domain.Command) (domain.OperationResult, error
 		return domain.OperationResult{}, domain.ErrInvalidOperationType
 	}
 
-	return handler(e.persistence, command.Key, command.Args)
+	return handler(e.persistence, command.Key, command.Value)
 }
 
 func NewEngine(persistence domain.Persistence, dataTypeRegistry domain.DataTypeRegistry) *Engine {

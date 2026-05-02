@@ -4,8 +4,8 @@ import (
 	"github.com/Lugriz/memdb/internal/domain"
 )
 
-func KeySetHandler(store domain.Persistence, key string, args any) (domain.OperationResult, error) {
-	data, ok := args.(string)
+func KeySetHandler(store domain.Persistence, key string, value any) (domain.OperationResult, error) {
+	data, ok := value.(string)
 	if !ok {
 		return domain.OperationResult{}, domain.ErrInvalidValueType // FIXME: Invalid type
 	}
