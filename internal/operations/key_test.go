@@ -1,4 +1,4 @@
-package datatypes
+package operations_test
 
 import (
 	"encoding/json"
@@ -8,6 +8,7 @@ import (
 
 	"github.com/Lugriz/memdb/internal/domain"
 	"github.com/Lugriz/memdb/internal/mocks"
+	"github.com/Lugriz/memdb/internal/operations"
 )
 
 func toString(s any) string {
@@ -56,7 +57,7 @@ func TestKeySetHandler(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.Name, func(t *testing.T) {
-			result, err := KeySetHandler(tt.Persistence, tt.Key, tt.Args)
+			result, err := operations.KeySetHandler(tt.Persistence, tt.Key, tt.Args)
 
 			if tt.ExpectErr && !errors.Is(tt.Err, err) {
 				t.Errorf("Got %s err, Want %s", err, tt.Err)
@@ -110,7 +111,7 @@ func TestKeyGetHandler(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.Name, func(t *testing.T) {
-			result, err := KeyGetHandler(tt.Persistence, tt.Key, tt.Args)
+			result, err := operations.KeyGetHandler(tt.Persistence, tt.Key, tt.Args)
 
 			if err != nil {
 				t.Errorf("Got %s err, Want %v", err, nil)
@@ -163,7 +164,7 @@ func TestKeyDelHandler(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.Name, func(t *testing.T) {
-			result, err := KeyDelHandler(tt.Persistence, tt.Key, tt.Args)
+			result, err := operations.KeyDelHandler(tt.Persistence, tt.Key, tt.Args)
 
 			if err != nil {
 				t.Errorf("Got %s err, Want %v", err, nil)

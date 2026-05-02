@@ -1,4 +1,4 @@
-package datatypes
+package operations
 
 import (
 	"github.com/Lugriz/memdb/internal/domain"
