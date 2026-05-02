@@ -16,6 +16,7 @@ func KeySetHandler(store domain.Persistence, key string, value any) (domain.Oper
 	})
 
 	return domain.OperationResult{
+		Type: domain.WRITE_OPERATION,
 		Write: &domain.WriteOperationResult{
 			AffectedKey: true,
 		},
@@ -25,6 +26,7 @@ func KeySetHandler(store domain.Persistence, key string, value any) (domain.Oper
 func KeyGetHandler(store domain.Persistence, key string, _ any) (domain.OperationResult, error) {
 	if val, ok := store.GetKV(key); ok {
 		return domain.OperationResult{
+			Type: domain.READ_OPERATION,
 			Read: &domain.ReadOperationResult{
 				Value: val.Data,
 			},
@@ -40,6 +42,7 @@ func KeyDelHandler(store domain.Persistence, key string, _ any) (domain.Operatio
 	writeOp.AffectedKey = store.DeleteKV(key)
 
 	return domain.OperationResult{
+		Type:  domain.WRITE_OPERATION,
 		Write: &writeOp,
 	}, nil
 }

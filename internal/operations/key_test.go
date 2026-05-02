@@ -22,7 +22,7 @@ func TestKeySetHandler(t *testing.T) {
 		Persistence     *mocks.MockPersistence
 		ExpectSetKVCall bool
 		Key             string
-		Args            []string
+		Value           string
 		Result          domain.OperationResult
 		ExpectErr       bool
 		Err             error
@@ -34,30 +34,19 @@ func TestKeySetHandler(t *testing.T) {
 			},
 			ExpectSetKVCall: true,
 			Key:             "key1",
-			Args:            []string{"val 1"},
+			Value:           "val 1",
 			Result: domain.OperationResult{
+				Type: domain.WRITE_OPERATION,
 				Write: &domain.WriteOperationResult{
 					AffectedKey: true,
 				},
 			},
 		},
-		{
-			Name: "missing args",
-			Persistence: &mocks.MockPersistence{
-				SpySetKV: &mocks.Spy{},
-			},
-			ExpectSetKVCall: false,
-			Key:             "key1",
-			Args:            []string{},
-			Result:          domain.OperationResult{},
-			ExpectErr:       true,
-			Err:             domain.ErrMissingArgs,
-		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.Name, func(t *testing.T) {
-			result, err := operations.KeySetHandler(tt.Persistence, tt.Key, tt.Args)
+			result, err := operations.KeySetHandler(tt.Persistence, tt.Key, tt.Value)
 
 			if tt.ExpectErr && !errors.Is(tt.Err, err) {
 				t.Errorf("Got %s err, Want %s", err, tt.Err)
@@ -80,18 +69,25 @@ func TestKeyGetHandler(t *testing.T) {
 		Name        string
 		Persistence *mocks.MockPersistence
 		Key         string
-		Args        []string
+		Value       any
 		Result      domain.OperationResult
 	}{
 		{
 			Name: "returns a value",
 			Persistence: &mocks.MockPersistence{
 				SpyGetKV: &mocks.Spy{
-					Returns: []any{"value1", true},
+					Returns: []any{
+						domain.Value{
+							DataType: domain.KEY,
+							Data:     "value1",
+						},
+						true,
+					},
 				},
 			},
 			Key: "key1",
 			Result: domain.OperationResult{
+				Type: domain.READ_OPERATION,
 				Read: &domain.ReadOperationResult{
 					Value: "value1",
 				},
@@ -101,7 +97,7 @@ func TestKeyGetHandler(t *testing.T) {
 			Name: "not found value",
 			Persistence: &mocks.MockPersistence{
 				SpyGetKV: &mocks.Spy{
-					Returns: []any{"", false},
+					Returns: []any{domain.Value{}, false},
 				},
 			},
 			Key:    "key1",
@@ -111,7 +107,7 @@ func TestKeyGetHandler(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.Name, func(t *testing.T) {
-			result, err := operations.KeyGetHandler(tt.Persistence, tt.Key, tt.Args)
+			result, err := operations.KeyGetHandler(tt.Persistence, tt.Key, tt.Value)
 
 			if err != nil {
 				t.Errorf("Got %s err, Want %v", err, nil)
@@ -129,7 +125,7 @@ func TestKeyDelHandler(t *testing.T) {
 		Name        string
 		Persistence *mocks.MockPersistence
 		Key         string
-		Args        []string
+		Value       any
 		Result      domain.OperationResult
 	}{
 		{
@@ -141,6 +137,7 @@ func TestKeyDelHandler(t *testing.T) {
 			},
 			Key: "key1",
 			Result: domain.OperationResult{
+				Type: domain.WRITE_OPERATION,
 				Write: &domain.WriteOperationResult{
 					AffectedKey: true,
 				},
@@ -155,6 +152,7 @@ func TestKeyDelHandler(t *testing.T) {
 			},
 			Key: "key1",
 			Result: domain.OperationResult{
+				Type: domain.WRITE_OPERATION,
 				Write: &domain.WriteOperationResult{
 					AffectedKey: false,
 				},
@@ -164,7 +162,7 @@ func TestKeyDelHandler(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.Name, func(t *testing.T) {
-			result, err := operations.KeyDelHandler(tt.Persistence, tt.Key, tt.Args)
+			result, err := operations.KeyDelHandler(tt.Persistence, tt.Key, tt.Value)
 
 			if err != nil {
 				t.Errorf("Got %s err, Want %v", err, nil)
