@@ -7,10 +7,10 @@ import (
 	"github.com/Lugriz/memdb/internal/domain"
 )
 
-func TestOperationTypeString(t *testing.T) {
+func TestOperationString(t *testing.T) {
 	tests := []struct {
 		Name   string
-		OpType domain.OperationType
+		OpType domain.Operation
 		Result string
 	}{
 		{
@@ -46,11 +46,11 @@ func TestOperationTypeString(t *testing.T) {
 	}
 }
 
-func TestParseOperationType(t *testing.T) {
+func TestParseOperation(t *testing.T) {
 	tests := []struct {
 		Name      string
 		Key       string
-		Result    domain.OperationType
+		Result    domain.Operation
 		ExpectErr bool
 		Err       error
 	}{
@@ -69,13 +69,13 @@ func TestParseOperationType(t *testing.T) {
 			Key:       "INVALID",
 			Result:    -1,
 			ExpectErr: true,
-			Err:       domain.ErrInvalidOperationType,
+			Err:       domain.ErrInvalidOperation,
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.Name, func(t *testing.T) {
-			result, err := domain.ParseOperationType(tt.Key)
+			result, err := domain.ParseOperation(tt.Key)
 
 			if tt.ExpectErr && !errors.Is(err, tt.Err) {
 				t.Errorf("want %s error, got %s", tt.Err, err)

@@ -15,9 +15,9 @@ func (e *Engine) Execute(command *domain.Command) (domain.OperationResult, error
 		return domain.OperationResult{}, domain.ErrInvalidDataType
 	}
 
-	handler, ok := opRegistry[command.OperationType]
+	handler, ok := opRegistry[command.Operation]
 	if !ok {
-		return domain.OperationResult{}, domain.ErrInvalidOperationType
+		return domain.OperationResult{}, domain.ErrInvalidOperation
 	}
 
 	return handler(e.persistence, command.Key, command.Value)

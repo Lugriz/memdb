@@ -1,8 +1,8 @@
 package domain
 
 type Command struct {
-	DataType      DataType
-	Key           string
-	OperationType OperationType
-	Value         any
+	DataType  DataType
+	Key       string
+	Operation Operation
+	Value     any
 }

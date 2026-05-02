@@ -6,15 +6,15 @@ import (
 	"github.com/Lugriz/memdb/internal/shared/maps"
 )
 
-type OperationType int
+type Operation int
 
 const (
-	SET OperationType = iota
+	SET Operation = iota
 	GET
 	DEL
 )
 
-var operationStrings = map[OperationType]string{
+var operationStrings = map[Operation]string{
 	SET: "SET",
 	GET: "GET",
 	DEL: "DEL",
@@ -22,7 +22,7 @@ var operationStrings = map[OperationType]string{
 
 var stringToOperations = maps.Invert(operationStrings)
 
-func (o OperationType) String() string {
+func (o Operation) String() string {
 	op, ok := operationStrings[o]
 	if ok {
 		return op
@@ -31,13 +31,13 @@ func (o OperationType) String() string {
 	return ""
 }
 
-func ParseOperationType(key string) (OperationType, error) {
+func ParseOperation(key string) (Operation, error) {
 	op, ok := stringToOperations[strings.ToUpper(key)]
 	if ok {
 		return op, nil
 	}
 
-	return -1, ErrInvalidOperationType
+	return -1, ErrInvalidOperation
 }
 
 type ReadOperationResult struct {
