@@ -7,7 +7,7 @@ import (
 func KeySetHandler(store domain.Persistence, key string, value any) (domain.OperationResult, error) {
 	data, ok := value.(string)
 	if !ok {
-		return domain.OperationResult{}, domain.ErrInvalidValueType // FIXME: Invalid type
+		return domain.OperationResult{}, domain.ErrInvalidValueType
 	}
 
 	store.SetKV(key, domain.Value{

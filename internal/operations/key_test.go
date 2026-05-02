@@ -22,7 +22,7 @@ func TestKeySetHandler(t *testing.T) {
 		Persistence     *mocks.MockPersistence
 		ExpectSetKVCall bool
 		Key             string
-		Value           string
+		Value           any
 		Result          domain.OperationResult
 		ExpectErr       bool
 		Err             error
@@ -41,6 +41,18 @@ func TestKeySetHandler(t *testing.T) {
 					AffectedKey: true,
 				},
 			},
+		},
+		{
+			Name: "error when invalid value type",
+			Persistence: &mocks.MockPersistence{
+				SpySetKV: &mocks.Spy{},
+			},
+			ExpectSetKVCall: false,
+			Key:             "key1",
+			Value:           struct{}{},
+			Result:          domain.OperationResult{},
+			ExpectErr:       true,
+			Err:             domain.ErrInvalidValueType,
 		},
 	}
 
