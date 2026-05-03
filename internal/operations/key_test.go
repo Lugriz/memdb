@@ -50,9 +50,11 @@ func TestKeySetHandler(t *testing.T) {
 			ExpectSetKVCall: false,
 			Key:             "key1",
 			Value:           struct{}{},
-			Result:          domain.OperationResult{},
-			ExpectErr:       true,
-			Err:             domain.ErrInvalidValueType,
+			Result: domain.OperationResult{
+				Type: domain.WRITE_OPERATION,
+			},
+			ExpectErr: true,
+			Err:       domain.ErrInvalidValueType,
 		},
 	}
 
@@ -112,8 +114,10 @@ func TestKeyGetHandler(t *testing.T) {
 					Returns: []any{domain.Value{}, false},
 				},
 			},
-			Key:    "key1",
-			Result: domain.OperationResult{},
+			Key: "key1",
+			Result: domain.OperationResult{
+				Type: domain.READ_OPERATION,
+			},
 		},
 	}
 

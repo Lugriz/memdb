@@ -7,7 +7,9 @@ import (
 func KeySetHandler(store domain.Persistence, key string, value any) (domain.OperationResult, error) {
 	data, ok := value.(string)
 	if !ok {
-		return domain.OperationResult{}, domain.ErrInvalidValueType
+		return domain.OperationResult{
+			Type: domain.WRITE_OPERATION,
+		}, domain.ErrInvalidValueType
 	}
 
 	store.SetKV(key, domain.Value{
@@ -33,7 +35,9 @@ func KeyGetHandler(store domain.Persistence, key string, _ any) (domain.Operatio
 		}, nil
 	}
 
-	return domain.OperationResult{}, nil
+	return domain.OperationResult{
+		Type: domain.READ_OPERATION,
+	}, nil
 }
 
 func KeyDelHandler(store domain.Persistence, key string, _ any) (domain.OperationResult, error) {
