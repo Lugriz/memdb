@@ -10,6 +10,10 @@ type Engine struct {
 }
 
 func (e *Engine) Execute(command *domain.Command) (domain.OperationResult, error) {
+	if command.Key == "" {
+		return domain.OperationResult{}, domain.ErrInvalidKey
+	}
+
 	opRegistry, ok := e.dataTypeRegistry[command.DataType]
 	if !ok {
 		return domain.OperationResult{}, domain.ErrInvalidDataType
