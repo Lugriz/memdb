@@ -1,11 +1,5 @@
 package domain
 
-import (
-	"strings"
-
-	"github.com/Lugriz/memdb/internal/shared/maps"
-)
-
 type Operation int
 
 const (
@@ -14,30 +8,19 @@ const (
 	DEL
 )
 
-var operationStrings = map[Operation]string{
+var OperationStrings = map[Operation]string{
 	SET: "SET",
 	GET: "GET",
 	DEL: "DEL",
 }
 
-var stringToOperations = maps.Invert(operationStrings)
-
 func (o Operation) String() string {
-	op, ok := operationStrings[o]
+	op, ok := OperationStrings[o]
 	if ok {
 		return op
 	}
 
 	return ""
-}
-
-func ParseOperation(key string) (Operation, error) {
-	op, ok := stringToOperations[strings.ToUpper(strings.TrimSpace(key))]
-	if ok {
-		return op, nil
-	}
-
-	return -1, ErrInvalidOperation
 }
 
 type OperationType int

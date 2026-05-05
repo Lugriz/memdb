@@ -1,37 +1,20 @@
 package domain
 
-import (
-	"strings"
-
-	"github.com/Lugriz/memdb/internal/shared/maps"
-)
-
 type DataType int
 
 const (
 	KEY DataType = iota
 )
 
-var dataTypeStrings = map[DataType]string{
+var DataTypeStrings = map[DataType]string{
 	KEY: "KEY",
 }
 
-var stringToDataType = maps.Invert(dataTypeStrings)
-
 func (c DataType) String() string {
-	cmd, ok := dataTypeStrings[c]
+	cmd, ok := DataTypeStrings[c]
 	if ok {
 		return cmd
 	}
 
 	return ""
-}
-
-func ParseDataType(key string) (DataType, error) {
-	dt, ok := stringToDataType[strings.ToUpper(strings.TrimSpace(key))]
-	if ok {
-		return dt, nil
-	}
-
-	return -1, ErrInvalidDataType
 }
