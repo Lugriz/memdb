@@ -6,17 +6,17 @@ import (
 	"github.com/Lugriz/memdb/internal/domain"
 )
 
-type Memdb struct {
+type InMemoryDB struct {
 	kv sync.Map
 }
 
-var _ domain.Persistence = &Memdb{}
+var _ domain.Persistence = &InMemoryDB{}
 
-func (db *Memdb) Set(key string, value domain.Value) {
+func (db *InMemoryDB) Set(key string, value domain.Value) {
 	db.kv.Store(key, value)
 }
 
-func (db *Memdb) Get(key string) (domain.Value, bool) {
+func (db *InMemoryDB) Get(key string) (domain.Value, bool) {
 	val, ok := db.kv.Load(key)
 	if ok {
 		return val.(domain.Value), true
@@ -25,7 +25,7 @@ func (db *Memdb) Get(key string) (domain.Value, bool) {
 	return domain.Value{}, false
 }
 
-func (db *Memdb) Delete(key string) bool {
+func (db *InMemoryDB) Delete(key string) bool {
 	if _, ok := db.kv.Load(key); ok {
 		db.kv.Delete(key)
 		return true
@@ -34,8 +34,8 @@ func (db *Memdb) Delete(key string) bool {
 	return false
 }
 
-func NewMemDB() *Memdb {
-	return &Memdb{
+func NewInMemoryDB() *InMemoryDB {
+	return &InMemoryDB{
 		kv: sync.Map{},
 	}
 }
