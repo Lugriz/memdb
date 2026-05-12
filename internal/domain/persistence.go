@@ -6,7 +6,7 @@ type Value struct {
 }
 
 type Persistence interface {
-	SetKV(key string, value Value)
-	GetKV(key string) (Value, bool)
-	DeleteKV(key string) bool
+	Set(key string, value Value)
+	Get(key string) (Value, bool)
+	Delete(key string) bool
 }

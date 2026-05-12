@@ -30,7 +30,7 @@ func TestKeySetHandler(t *testing.T) {
 		{
 			Name: "successfull",
 			Persistence: &mocks.MockPersistence{
-				SpySetKV: &mocks.Spy{},
+				SpySet: &mocks.Spy{},
 			},
 			ExpectSetKVCall: true,
 			Key:             "key1",
@@ -45,7 +45,7 @@ func TestKeySetHandler(t *testing.T) {
 		{
 			Name: "error when invalid value type",
 			Persistence: &mocks.MockPersistence{
-				SpySetKV: &mocks.Spy{},
+				SpySet: &mocks.Spy{},
 			},
 			ExpectSetKVCall: false,
 			Key:             "key1",
@@ -70,8 +70,8 @@ func TestKeySetHandler(t *testing.T) {
 				t.Errorf("Got %s result, Want %s", toString(tt.Result), toString(result))
 			}
 
-			if tt.Persistence.SpySetKV.Called != tt.ExpectSetKVCall {
-				t.Errorf("Got %t when called SetKV, Want %t", tt.Persistence.SpySetKV.Called, true)
+			if tt.Persistence.SpySet.Called != tt.ExpectSetKVCall {
+				t.Errorf("Got %t when called SetKV, Want %t", tt.Persistence.SpySet.Called, true)
 			}
 		})
 	}
@@ -89,7 +89,7 @@ func TestKeyGetHandler(t *testing.T) {
 		{
 			Name: "returns a value",
 			Persistence: &mocks.MockPersistence{
-				SpyGetKV: &mocks.Spy{
+				SpyGet: &mocks.Spy{
 					Returns: []any{
 						domain.Value{
 							DataType: domain.KEY,
@@ -110,7 +110,7 @@ func TestKeyGetHandler(t *testing.T) {
 		{
 			Name: "not found value",
 			Persistence: &mocks.MockPersistence{
-				SpyGetKV: &mocks.Spy{
+				SpyGet: &mocks.Spy{
 					Returns: []any{domain.Value{}, false},
 				},
 			},
@@ -147,7 +147,7 @@ func TestKeyDelHandler(t *testing.T) {
 		{
 			Name: "Delete the key",
 			Persistence: &mocks.MockPersistence{
-				SpyDeleteKV: &mocks.Spy{
+				SpyDelete: &mocks.Spy{
 					Returns: []any{true},
 				},
 			},
@@ -162,7 +162,7 @@ func TestKeyDelHandler(t *testing.T) {
 		{
 			Name: "Unexisting key",
 			Persistence: &mocks.MockPersistence{
-				SpyDeleteKV: &mocks.Spy{
+				SpyDelete: &mocks.Spy{
 					Returns: []any{false},
 				},
 			},

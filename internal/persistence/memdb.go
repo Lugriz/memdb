@@ -12,11 +12,11 @@ type Memdb struct {
 
 var _ domain.Persistence = &Memdb{}
 
-func (db *Memdb) SetKV(key string, value domain.Value) {
+func (db *Memdb) Set(key string, value domain.Value) {
 	db.kv.Store(key, value)
 }
 
-func (db *Memdb) GetKV(key string) (domain.Value, bool) {
+func (db *Memdb) Get(key string) (domain.Value, bool) {
 	val, ok := db.kv.Load(key)
 	if ok {
 		return val.(domain.Value), true
@@ -25,7 +25,7 @@ func (db *Memdb) GetKV(key string) (domain.Value, bool) {
 	return domain.Value{}, false
 }
 
-func (db *Memdb) DeleteKV(key string) bool {
+func (db *Memdb) Delete(key string) bool {
 	if _, ok := db.kv.Load(key); ok {
 		db.kv.Delete(key)
 		return true
