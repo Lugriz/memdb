@@ -5,17 +5,21 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/Lugriz/memdb/internal/domain"
+	"github.com/Lugriz/memdb/internal/datatypes"
 	"github.com/Lugriz/memdb/internal/engine"
+	"github.com/Lugriz/memdb/internal/engine/runtime"
+	appErrors "github.com/Lugriz/memdb/internal/errors"
 	"github.com/Lugriz/memdb/internal/mocks"
+	"github.com/Lugriz/memdb/internal/persistence"
+	"github.com/Lugriz/memdb/internal/registry"
 )
 
-func mockRegistry() domain.DataTypeRegistry {
-	return domain.DataTypeRegistry{
-		domain.KEY: domain.OperationRegistry{
-			domain.SET: func(_ domain.Persistence, _ string, _ any) (domain.OperationResult, error) {
-				return domain.OperationResult{
-					Write: &domain.WriteOperationResult{
+func mockRegistry() registry.DataTypeRegistry {
+	return registry.DataTypeRegistry{
+		datatypes.KEY: registry.OperationRegistry{
+			datatypes.SET: func(_ persistence.Persistence, _ string, _ any) (runtime.Result, error) {
+				return runtime.Result{
+					Write: &runtime.WriteResult{
 						AffectedKey: true,
 					},
 				}, nil
@@ -27,54 +31,54 @@ func mockRegistry() domain.DataTypeRegistry {
 func TestEngine(t *testing.T) {
 	tests := []struct {
 		Name        string
-		Command     *domain.Command
-		Result      domain.OperationResult
+		Command     *engine.Command
+		Result      runtime.Result
 		ExpectedErr bool
 		Err         error
 	}{
 		{
 			Name: "invalid key",
-			Command: &domain.Command{
-				DataType:  domain.KEY,
+			Command: &engine.Command{
+				DataType:  datatypes.KEY,
 				Key:       "",
-				Operation: domain.SET,
+				Operation: datatypes.SET,
 				Value:     "1",
 			},
 			ExpectedErr: true,
-			Err:         domain.ErrInvalidKey,
+			Err:         appErrors.ErrInvalidKey,
 		},
 		{
 			Name: "invalid data type",
-			Command: &domain.Command{
+			Command: &engine.Command{
 				DataType:  -1,
 				Key:       "test",
-				Operation: domain.SET,
+				Operation: datatypes.SET,
 				Value:     "1",
 			},
 			ExpectedErr: true,
-			Err:         domain.ErrInvalidDataType,
+			Err:         appErrors.ErrInvalidDataType,
 		},
 		{
 			Name: "invalid operation",
-			Command: &domain.Command{
-				DataType:  domain.KEY,
+			Command: &engine.Command{
+				DataType:  datatypes.KEY,
 				Key:       "test",
 				Operation: -1,
 				Value:     "1",
 			},
 			ExpectedErr: true,
-			Err:         domain.ErrInvalidOperation,
+			Err:         appErrors.ErrInvalidOperation,
 		},
 		{
 			Name: "execute command successfully",
-			Command: &domain.Command{
-				DataType:  domain.KEY,
+			Command: &engine.Command{
+				DataType:  datatypes.KEY,
 				Key:       "test",
-				Operation: domain.SET,
+				Operation: datatypes.SET,
 				Value:     "1",
 			},
-			Result: domain.OperationResult{
-				Write: &domain.WriteOperationResult{
+			Result: runtime.Result{
+				Write: &runtime.WriteResult{
 					AffectedKey: true,
 				},
 			},
