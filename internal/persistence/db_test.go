@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/Lugriz/memdb/internal/domain"
+	"github.com/Lugriz/memdb/internal/datatypes"
 	"github.com/Lugriz/memdb/internal/persistence"
 )
 
@@ -13,20 +13,20 @@ func TestGet(t *testing.T) {
 		Name          string
 		Key           string
 		SetupFunc     func(*persistence.InMemoryDB)
-		ExpectedValue domain.Value
+		ExpectedValue persistence.Value
 		ExpectedBool  bool
 	}{
 		{
 			Name: "return existing value",
 			Key:  "key",
 			SetupFunc: func(db *persistence.InMemoryDB) {
-				db.Set("key", domain.Value{
-					DataType: domain.KEY,
+				db.Set("key", persistence.Value{
+					DataType: datatypes.KEY,
 					Data:     "value 1",
 				})
 			},
-			ExpectedValue: domain.Value{
-				DataType: domain.KEY,
+			ExpectedValue: persistence.Value{
+				DataType: datatypes.KEY,
 				Data:     "value 1",
 			},
 			ExpectedBool: true,
@@ -35,7 +35,7 @@ func TestGet(t *testing.T) {
 			Name:          "return unexisting value",
 			Key:           "key",
 			SetupFunc:     nil,
-			ExpectedValue: domain.Value{},
+			ExpectedValue: persistence.Value{},
 			ExpectedBool:  false,
 		},
 	}
@@ -78,8 +78,8 @@ func TestDelete(t *testing.T) {
 			Name: "returns true when deleting a key",
 			Key:  "key",
 			SetupFunc: func(db *persistence.InMemoryDB) {
-				db.Set("key", domain.Value{
-					DataType: domain.KEY,
+				db.Set("key", persistence.Value{
+					DataType: datatypes.KEY,
 					Data:     "val",
 				})
 			},

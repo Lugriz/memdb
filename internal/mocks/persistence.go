@@ -1,6 +1,8 @@
 package mocks
 
-import "github.com/Lugriz/memdb/internal/domain"
+import (
+	"github.com/Lugriz/memdb/internal/persistence"
+)
 
 type MockPersistence struct {
 	SpySet    *Spy
@@ -8,16 +10,16 @@ type MockPersistence struct {
 	SpyDelete *Spy
 }
 
-var _ domain.Persistence = &MockPersistence{}
+var _ persistence.Persistence = &MockPersistence{}
 
-func (m *MockPersistence) Set(key string, value domain.Value) {
+func (m *MockPersistence) Set(key string, value persistence.Value) {
 	m.SpySet.Called = true
 }
 
-func (m *MockPersistence) Get(key string) (domain.Value, bool) {
+func (m *MockPersistence) Get(key string) (persistence.Value, bool) {
 	r := m.SpyGet.Returns
 
-	return r[0].(domain.Value), r[1].(bool)
+	return r[0].(persistence.Value), r[1].(bool)
 }
 
 func (m *MockPersistence) Delete(key string) bool {

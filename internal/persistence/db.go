@@ -2,27 +2,25 @@ package persistence
 
 import (
 	"sync"
-
-	"github.com/Lugriz/memdb/internal/domain"
 )
 
 type InMemoryDB struct {
 	kv sync.Map
 }
 
-var _ domain.Persistence = &InMemoryDB{}
+var _ Persistence = &InMemoryDB{}
 
-func (db *InMemoryDB) Set(key string, value domain.Value) {
+func (db *InMemoryDB) Set(key string, value Value) {
 	db.kv.Store(key, value)
 }
 
-func (db *InMemoryDB) Get(key string) (domain.Value, bool) {
+func (db *InMemoryDB) Get(key string) (Value, bool) {
 	val, ok := db.kv.Load(key)
 	if ok {
-		return val.(domain.Value), true
+		return val.(Value), true
 	}
 
-	return domain.Value{}, false
+	return Value{}, false
 }
 
 func (db *InMemoryDB) Delete(key string) bool {
