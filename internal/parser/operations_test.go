@@ -4,7 +4,8 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/Lugriz/memdb/internal/domain"
+	"github.com/Lugriz/memdb/internal/datatypes"
+	appErrors "github.com/Lugriz/memdb/internal/errors"
 	"github.com/Lugriz/memdb/internal/parser"
 )
 
@@ -12,31 +13,31 @@ func TestParseOperation(t *testing.T) {
 	tests := []struct {
 		Name      string
 		Key       string
-		Result    domain.Operation
+		Result    datatypes.Operation
 		ExpectErr bool
 		Err       error
 	}{
 		{
 			Name:   "returns a operation type with upper case key",
 			Key:    "SET",
-			Result: domain.SET,
+			Result: datatypes.SET,
 		},
 		{
 			Name:   "returns a operation type with lower case key",
 			Key:    "get",
-			Result: domain.GET,
+			Result: datatypes.GET,
 		},
 		{
 			Name:   "Should return DEL even with whitespaces",
 			Key:    "  DEL  ",
-			Result: domain.DEL,
+			Result: datatypes.DEL,
 		},
 		{
 			Name:      "returns an error when operation type does not exist",
 			Key:       "INVALID",
 			Result:    -1,
 			ExpectErr: true,
-			Err:       domain.ErrInvalidOperation,
+			Err:       appErrors.ErrInvalidOperation,
 		},
 	}
 

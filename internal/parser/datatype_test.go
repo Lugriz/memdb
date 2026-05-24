@@ -4,7 +4,8 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/Lugriz/memdb/internal/domain"
+	"github.com/Lugriz/memdb/internal/datatypes"
+	appErrors "github.com/Lugriz/memdb/internal/errors"
 	"github.com/Lugriz/memdb/internal/parser"
 )
 
@@ -12,31 +13,31 @@ func TestParseDataType(t *testing.T) {
 	tests := []struct {
 		Name      string
 		Key       string
-		Result    domain.DataType
+		Result    datatypes.DataType
 		ExpectErr bool
 		Err       error
 	}{
 		{
 			Name:   "returns a data type with upper case key",
 			Key:    "KEY",
-			Result: domain.KEY,
+			Result: datatypes.KEY,
 		},
 		{
 			Name:   "returns a data type with lower case key",
 			Key:    "key",
-			Result: domain.KEY,
+			Result: datatypes.KEY,
 		},
 		{
 			Name:   "returns a data type even with whitespaces",
 			Key:    "  KEY  ",
-			Result: domain.KEY,
+			Result: datatypes.KEY,
 		},
 		{
 			Name:      "returns an error when data type does not exist",
 			Key:       "INVALID",
 			Result:    -1,
 			ExpectErr: true,
-			Err:       domain.ErrInvalidDataType,
+			Err:       appErrors.ErrInvalidDataType,
 		},
 	}
 
