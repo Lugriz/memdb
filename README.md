@@ -5,7 +5,7 @@ memdb is a simple key-value in-memory database. Just for learning. This database
 ## Features
 
 - Multiple data types support
-  - [ ] String
+  - [x] String
   - [ ] Hash
   - [ ] Set
 - [ ] HTTP/CLI access
@@ -17,7 +17,7 @@ memdb is a simple key-value in-memory database. Just for learning. This database
 
 Running the command
 
-> memdb --port 0000 --eviction-policy LRU
+> memdb --port 8080 --eviction-policy LRU
 
 ## HTTP API Specification
 
