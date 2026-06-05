@@ -190,3 +190,58 @@ func TestGetHandler(t *testing.T) {
 		})
 	}
 }
+
+func TestDelHandler(t *testing.T) {
+	tests := []struct {
+		Name        string
+		Persistence *mocks.MockPersistence
+		Key         string
+		Value       any
+		Result      runtime.Result
+	}{
+		{
+			Name: "Delete the key",
+			Persistence: &mocks.MockPersistence{
+				SpyDelete: &mocks.Spy{
+					Returns: []any{true},
+				},
+			},
+			Key: "key1",
+			Result: runtime.Result{
+				Type: runtime.WRITE_RESULT,
+				Write: &runtime.WriteResult{
+					AffectedKey: true,
+				},
+			},
+		},
+		{
+			Name: "Unexisting key",
+			Persistence: &mocks.MockPersistence{
+				SpyDelete: &mocks.Spy{
+					Returns: []any{false},
+				},
+			},
+			Key: "key1",
+			Result: runtime.Result{
+				Type: runtime.WRITE_RESULT,
+				Write: &runtime.WriteResult{
+					AffectedKey: false,
+				},
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.Name, func(t *testing.T) {
+			result, err := handlers.DelHandler(tt.Persistence, tt.Key, tt.Value)
+
+			if err != nil {
+				t.Errorf("Got %s err, Want %v", err, nil)
+			}
+
+			if !reflect.DeepEqual(tt.Result, result) {
+				t.Errorf("Got %s result, Want %s", toString(result), toString(tt.Result))
+			}
+		})
+	}
+}

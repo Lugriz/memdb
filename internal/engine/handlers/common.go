@@ -45,6 +45,17 @@ func GetHandler(store persistence.Persistence, key string, _ any) (runtime.Resul
 	}, nil
 }
 
+func DelHandler(store persistence.Persistence, key string, _ any) (runtime.Result, error) {
+	var writeOp runtime.WriteResult
+
+	writeOp.AffectedKey = store.Delete(key)
+
+	return runtime.Result{
+		Type:  runtime.WRITE_RESULT,
+		Write: &writeOp,
+	}, nil
+}
+
 func isValidValue(value persistence.Value) bool {
 	ok := false
 
