@@ -1,6 +1,7 @@
 package handlers_test
 
 import (
+	"encoding/json"
 	"errors"
 	"reflect"
 	"testing"
@@ -12,6 +13,11 @@ import (
 	"github.com/Lugriz/memdb/internal/mocks"
 	"github.com/Lugriz/memdb/internal/persistence"
 )
+
+func toString(s any) string {
+	r, _ := json.Marshal(s)
+	return string(r)
+}
 
 func TestSetHandler(t *testing.T) {
 	tests := []struct {

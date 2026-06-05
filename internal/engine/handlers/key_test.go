@@ -1,85 +1,15 @@
 package handlers_test
 
 import (
-	"encoding/json"
-	"errors"
 	"reflect"
 	"testing"
 
 	"github.com/Lugriz/memdb/internal/datatypes"
 	"github.com/Lugriz/memdb/internal/engine/handlers"
 	"github.com/Lugriz/memdb/internal/engine/runtime"
-	appError "github.com/Lugriz/memdb/internal/errors"
 	"github.com/Lugriz/memdb/internal/mocks"
 	"github.com/Lugriz/memdb/internal/persistence"
 )
-
-func toString(s any) string {
-	r, _ := json.Marshal(s)
-	return string(r)
-}
-
-func TestKeySetHandler(t *testing.T) {
-	tests := []struct {
-		Name            string
-		Persistence     *mocks.MockPersistence
-		ExpectSetKVCall bool
-		Key             string
-		Value           any
-		Result          runtime.Result
-		ExpectErr       bool
-		Err             error
-	}{
-		{
-			Name: "successfull",
-			Persistence: &mocks.MockPersistence{
-				SpySet: &mocks.Spy{},
-			},
-			ExpectSetKVCall: true,
-			Key:             "key1",
-			Value:           "val 1",
-			Result: runtime.Result{
-				Type: runtime.WRITE_RESULT,
-				Write: &runtime.WriteResult{
-					AffectedKey: true,
-				},
-			},
-		},
-		{
-			Name: "error when invalid value type",
-			Persistence: &mocks.MockPersistence{
-				SpySet: &mocks.Spy{},
-			},
-			ExpectSetKVCall: false,
-			Key:             "key1",
-			Value:           struct{}{},
-			Result: runtime.Result{
-				Type: runtime.WRITE_RESULT,
-			},
-			ExpectErr: true,
-			Err:       appError.ErrInvalidValueType,
-		},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.Name, func(t *testing.T) {
-			result, err := handlers.KeySetHandler(tt.Persistence, tt.Key, tt.Value)
-
-			if tt.ExpectErr && !errors.Is(tt.Err, err) {
-				t.Errorf("Got %s err, Want %s", err, tt.Err)
-			}
-
-			if !reflect.DeepEqual(tt.Result, result) {
-				t.Errorf("Got %s result, Want %s", toString(tt.Result), toString(result))
-			}
-
-			if tt.Persistence.SpySet.Called != tt.ExpectSetKVCall {
-				t.Errorf("Got %t when called SetKV, Want %t", tt.Persistence.SpySet.Called, true)
-			}
-		})
-	}
-
-}
 
 func TestKeyGetHandler(t *testing.T) {
 	tests := []struct {
