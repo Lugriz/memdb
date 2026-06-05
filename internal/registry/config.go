@@ -8,7 +8,7 @@ import (
 var DataTypeRegistryConfig = DataTypeRegistry{
 	datatypes.KEY: OperationRegistry{
 		datatypes.SET: handlers.KeySetHandler,
-		datatypes.GET: handlers.KeyGetHandler,
-		datatypes.DEL: handlers.KeyDelHandler,
+		datatypes.GET: handlers.GetHandler,
+		datatypes.DEL: handlers.DelHandler,
 	},
 }

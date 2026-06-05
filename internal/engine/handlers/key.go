@@ -12,29 +12,3 @@ func KeySetHandler(store persistence.Persistence, key string, value any) (runtim
 		Data:     value,
 	})
 }
-
-func KeyGetHandler(store persistence.Persistence, key string, _ any) (runtime.Result, error) {
-	if val, ok := store.Get(key); ok {
-		return runtime.Result{
-			Type: runtime.READ_RESULT,
-			Read: &runtime.ReadResult{
-				Value: val.Data,
-			},
-		}, nil
-	}
-
-	return runtime.Result{
-		Type: runtime.READ_RESULT,
-	}, nil
-}
-
-func KeyDelHandler(store persistence.Persistence, key string, _ any) (runtime.Result, error) {
-	var writeOp runtime.WriteResult
-
-	writeOp.AffectedKey = store.Delete(key)
-
-	return runtime.Result{
-		Type:  runtime.WRITE_RESULT,
-		Write: &writeOp,
-	}, nil
-}
