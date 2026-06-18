@@ -18,6 +18,11 @@ func TestOperationString(t *testing.T) {
 			Result: "GET",
 		},
 		{
+			Name:   "Should return GET_ALL",
+			OpType: datatypes.GET_ALL,
+			Result: "GET_ALL",
+		},
+		{
 			Name:   "Should return SET",
 			OpType: datatypes.SET,
 			Result: "SET",
@@ -26,6 +31,11 @@ func TestOperationString(t *testing.T) {
 			Name:   "Should return DEL",
 			OpType: datatypes.DEL,
 			Result: "DEL",
+		},
+		{
+			Name:   "Should return DEL_ALL",
+			OpType: datatypes.DEL_ALL,
+			Result: "DEL_ALL",
 		},
 		{
 			Name:   "Should return ADD",
