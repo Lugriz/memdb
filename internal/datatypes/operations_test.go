@@ -28,6 +28,11 @@ func TestOperationString(t *testing.T) {
 			Result: "DEL",
 		},
 		{
+			Name:   "Should return ADD",
+			OpType: datatypes.ADD,
+			Result: "ADD",
+		},
+		{
 			Name:   "Should return an empty string when not existing operation",
 			OpType: -1,
 			Result: "",
