@@ -18,6 +18,11 @@ func TestDataTypeString(t *testing.T) {
 			Result:   "KEY",
 		},
 		{
+			Name:     "Should return HASH",
+			DataType: datatypes.HASH,
+			Result:   "HASH",
+		},
+		{
 			Name:     "Should return an empty string when not existing data type",
 			DataType: -1,
 			Result:   "",

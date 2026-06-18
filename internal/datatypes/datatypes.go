@@ -4,10 +4,12 @@ type DataType int
 
 const (
 	KEY DataType = iota
+	HASH
 )
 
 var DataTypeStrings = map[DataType]string{
-	KEY: "KEY",
+	KEY:  "KEY",
+	HASH: "HASH",
 }
 
 func (c DataType) String() string {
