@@ -12,8 +12,7 @@ var DataTypeRegistryConfig = DataTypeRegistry{
 		datatypes.DEL: handlers.DelHandler,
 	},
 	datatypes.HASH: OperationRegistry{
-		datatypes.SET:     handlers.HashSetHandler,
-		datatypes.GET_ALL: handlers.GetHandler,
-		datatypes.DEL_ALL: handlers.DelHandler,
+		datatypes.SET: handlers.HashSetHandler,
+		datatypes.ADD: handlers.HashAddHandler,
 	},
 }
